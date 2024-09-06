@@ -1,0 +1,30 @@
+Commands
+
+"C:\Program Files\mysqld_exporter-0.15.1.windows-386\mysqld_exporter.exe” --config.my-cnf="C:\Program Files\mysqld_exporter-0.15.1.windows-386\my.cnf"
+"C:\Program Files\prometheus-2.54.1.windows-amd64\prometheus.exe" --config.file="C:\Program Files\prometheus-2.54.1.windows-amd64\prometheus.yml" --web.listen-address=:9090
+
+net start MySQLMaster
+net start MySQLSlave1
+net start MySQLSlave2
+
+mysql -uroot -P3307 –p1234 (Master)
+mysql -uroot -P3308 –p1234 (Slave 1)
+mysql -uroot -P3309 –p1234 (Slave 2)
+http://localhost:9104/metrics (MySQL Exporter)
+http://localhost:9090/ (Prometheus)
+http://localhost:3000 (Grafana)
+
+
+SELECT STATEMENT (Read)
+mysqlslap --concurrency=50 --iterations=100 --query="SELECT * FROM employees" --create-schema=dev_db --user=sgohp --password=1234 --port=3307 
+
+INSERT STATEMENT (Write)
+mysqlslap --concurrency=50 --iterations=100 --query="INSERT INTO employees (name, position, salary) VALUES ('Test User', 'Tester', 50000.00);" --create-schema=dev_db --user=sgohp --password=1234 --port=3307
+
+INSERT, UDPATE, DELETE STATEMENT (Write and Read)
+mysqlslap --concurrency=50 --iterations=100 --query="INSERT INTO employees (name, position, salary) VALUES ('Test User', 'Tester', 50000.00); UPDATE employees SET salary = salary + 5000 WHERE position = 'Tester'; DELETE FROM employees WHERE name = 'Test User';" --create-schema=dev_db --user=sgohp --password=1234 --port=3307
+
+
+show variables like 'datadir';
+
+SHOW ENGINES;
